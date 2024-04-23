@@ -20,7 +20,8 @@ function startApp() {
     let content = document.querySelector('#content') as HTMLTextAreaElement;
 
     // @ts-ignore
-    socket = io('ws://',{
+    socket = io('wss://',{
+        secure: true,
         query: {
             roomID: input.value
         }
