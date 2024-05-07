@@ -16,8 +16,9 @@ function startApp() {
     document.querySelector('#room-id').disabled = true;
     let input = document.querySelector('#room-id');
     let content = document.querySelector('#content');
+    console.log(location.protocol);
     // @ts-ignore
-    socket = io((location.protocol == "https" ? 'wss' : 'ws') + '://', {
+    socket = io((location.protocol == "https:" ? 'wss' : 'ws') + '://', {
         secure: true,
         query: {
             roomID: input.value
