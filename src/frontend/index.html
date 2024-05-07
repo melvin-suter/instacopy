@@ -21,6 +21,22 @@
             right: 0px;
             padding: 1rem;
         }
+
+        .file-drop {
+            border-style: dashed !important;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .disabled {
+            background-color: var(--bs-secondary-bg);
+        }
+
+        .hover {
+            border-color: #00f7ff !important;
+            border-width: 3px;
+        }
     </style>
 </head>
   <body class="" data-bs-theme="dark">
@@ -39,6 +55,9 @@
             </div>
         </div>
         <textarea disabled class="form-control flex-fill h-100" id="content"></textarea>
+        <div>
+            <div class="file-drop disabled border rounded">Drop files here</div>
+        </div>
 
     </div>
   </body>

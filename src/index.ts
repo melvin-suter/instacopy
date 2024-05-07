@@ -37,7 +37,9 @@ app.get('/', (req:express.Request, res:express.Response) => {
 
 let users = new Map();
 const server = http.createServer(app);
-const io = new socketio.Server(server);
+const io = new socketio.Server(server,{
+  maxHttpBufferSize: 2*1e9 // 2GB
+});
 
 
 /***********************
@@ -60,6 +62,10 @@ io.on('connection', (socket) => {
   socket.on('update', (data) => {
     io.to(roomID).emit('update',{content: data.content});
   })
+
+  socket.on("upload", (file, callback) => {
+      io.to(roomID).except(socket.id).emit('download',file);
+  });
 
 });
 

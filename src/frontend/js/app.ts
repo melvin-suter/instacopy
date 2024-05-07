@@ -20,7 +20,7 @@ function startApp() {
     let content = document.querySelector('#content') as HTMLTextAreaElement;
 
     // @ts-ignore
-    socket = io('wss://',{
+    socket = io( (location.protocol == "https" ? 'wss' : 'ws') + '://',{
         secure: true,
         query: {
             roomID: input.value
@@ -32,6 +32,22 @@ function startApp() {
     socket.on('update',(data:any) => {
         content.value = data.content
     }); 
+
+    socket.on('download', (data:any) => {
+
+        const link = document.createElement( 'a' );
+        link.style.display = 'none';
+        document.body.appendChild( link );
+
+
+        const blob = new Blob( [ data.content ], { type: data.mime } );	
+        const objectURL = URL.createObjectURL( blob );
+        
+        link.href = objectURL;
+        link.href = URL.createObjectURL( blob );
+        link.download =  data.name;
+        link.click();
+    });
 
     socket.on('alert', (data:any) => {
         let html = '<div class="toast d-block align-items-center" role="alert" aria-live="assertive" aria-atomic="true">';
@@ -51,7 +67,27 @@ function startApp() {
         socket.emit('update', {content: content.value })
     }, 1000));
 
-   
+    
+    document.querySelector(".file-drop")?.addEventListener('drop',(ev:any) => {
+        document.querySelector(".file-drop")?.classList.remove('hover');
+        for(let file of ev.dataTransfer.files){
+            socket.emit("upload", {name: file.name, mime: file.type, content: file}, (status) => {
+                console.log(status);
+            });
+        }
+        ev.preventDefault();
+        ev.stopPropagation();
+    });
+
+
+    document.querySelector(".file-drop")?.addEventListener('dragenter', () => {
+        document.querySelector(".file-drop")?.classList.add('hover');
+    }, false)
+    document.querySelector(".file-drop")?.addEventListener('dragleave', () => {
+        document.querySelector(".file-drop")?.classList.remove('hover');
+    }, false)
+
+    document.querySelector(".file-drop")?.classList.remove('disabled');
 }
 
 
@@ -66,6 +102,12 @@ document.querySelector('#room-id')?.addEventListener('keyup',(ev:any) => {
         startApp();
     }
 });
+
+document.querySelector(".file-drop")?.addEventListener('dragover',(ev:any) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+});
+
 
 
 
