@@ -51,6 +51,16 @@ function startApp() {
             document.querySelector('.toast:first-child').remove();
         }, 3000);
     });
+    socket.on('my-id', (data) => {
+        document.getElementById('my-id').innerHTML = "Your ID: " + data.id;
+    });
+    socket.on('update-clients', (data) => {
+        let html = "";
+        data.clients.forEach((client) => {
+            html += '<div class="client">' + client + '</div>';
+        });
+        document.getElementById('client-list').innerHTML = html;
+    });
     document.querySelector('#content')?.addEventListener('keyup', delay(() => {
         console.log("emit " + content.value);
         socket.emit('update', { content: content.value });
@@ -84,6 +94,9 @@ document.querySelector('#room-id')?.addEventListener('keyup', (ev) => {
 document.querySelector(".file-drop")?.addEventListener('dragover', (ev) => {
     ev.preventDefault();
     ev.stopPropagation();
+});
+document.getElementById('my-id')?.addEventListener('click', (ev) => {
+    document.getElementById('client-list')?.classList.toggle('d-none');
 });
 document.addEventListener('click', (ev) => {
     let input = ev.target.closest(".btn-close");

@@ -62,6 +62,18 @@ function startApp() {
         },3000);
     })
 
+    socket.on('my-id', (data:any) => {
+        document.getElementById('my-id')!.innerHTML = "Your ID: " + data.id;
+    });
+
+    socket.on('update-clients', (data:any) => {
+        let html = "";
+        data.clients.forEach((client:any) => {
+            html += '<div class="client">' + client + '</div>';
+        });
+        document.getElementById('client-list')!.innerHTML = html;
+    });
+
     document.querySelector('#content')?.addEventListener('keyup',delay(() => {
         console.log("emit " + content.value)
         socket.emit('update', {content: content.value })
@@ -108,6 +120,11 @@ document.querySelector(".file-drop")?.addEventListener('dragover',(ev:any) => {
     ev.stopPropagation();
 });
 
+
+
+document.getElementById('my-id')?.addEventListener('click',(ev:any) => {
+    document.getElementById('client-list')?.classList.toggle('d-none');
+});
 
 
 

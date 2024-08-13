@@ -68,6 +68,8 @@ io.on('connection', (socket) => {
     const roomID = "room-" + (socket.handshake.query.roomID ? socket.handshake.query.roomID : 'no one');
     socket.join(roomID);
     io.to(roomID).except(socket.id).emit('alert', { message: 'Client connected' });
+    io.to(socket.id).emit('my-id', { id: socket.id });
+    io.to(roomID).emit('update-clients', { clients: [...io.sockets.adapter.rooms.get(roomID)] });
     socket.on('update', (data) => {
         io.to(roomID).emit('update', { content: data.content });
     });

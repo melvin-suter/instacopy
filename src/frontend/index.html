@@ -37,12 +37,49 @@
             border-color: #00f7ff !important;
             border-width: 3px;
         }
+
+        .clients-drop{
+            position: fixed;
+            right: 10px;
+            bottom: 10px;
+            width: 100%;
+            max-width: 250px;
+            border: 2px solid var(--bs-secondary-bg);
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .my-id {
+            padding: 1rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .client-list {
+            border-bottom: 2px solid var(--bs-secondary-bg);
+        }
+
+        .client-list .client {
+            padding: 0.5rem 1rem;
+            border-top: 1px solid var(--bs-secondary-bg);
+        }
+
+        .client-list .client:first-child {
+            border-top: none;
+        }
     </style>
 </head>
   <body class="" data-bs-theme="dark">
 
     <div class="toasts">
         
+    </div>
+
+    <div class="clients-drop">
+        <div class="client-list d-none" id="client-list">
+            <div style="text-align: center">not connected</div>
+        </div>
+        <div class="my-id" id="my-id">Your ID: ---</div>
     </div>
 
     <div class="container d-flex h-100 flex-column p-3">

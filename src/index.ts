@@ -58,6 +58,8 @@ io.on('connection', (socket) => {
   socket.join(roomID);
   
   io.to(roomID).except(socket.id).emit('alert',{message: 'Client connected'});
+  io.to(socket.id).emit('my-id',{id: socket.id});
+  io.to(roomID).emit('update-clients',{clients: [...io.sockets.adapter.rooms.get(roomID)!]});
 
   socket.on('update', (data) => {
     io.to(roomID).emit('update',{content: data.content});
