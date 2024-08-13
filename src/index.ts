@@ -59,14 +59,21 @@ io.on('connection', (socket) => {
   
   io.to(roomID).except(socket.id).emit('alert',{message: 'Client connected'});
   io.to(socket.id).emit('my-id',{id: socket.id});
+
   io.to(roomID).emit('update-clients',{clients: [...io.sockets.adapter.rooms.get(roomID)!]});
 
   socket.on('update', (data) => {
+    io.to(roomID).emit('update-clients',{clients: [...io.sockets.adapter.rooms.get(roomID)!]});
     io.to(roomID).emit('update',{content: data.content});
   })
 
   socket.on("upload", (file, callback) => {
-      io.to(roomID).except(socket.id).emit('download',file);
+    io.to(roomID).emit('update-clients',{clients: [...io.sockets.adapter.rooms.get(roomID)!]});
+    io.to(roomID).except(socket.id).emit('download',file);
+  });
+
+  socket.on('disconnect',(reason) => {
+    io.to(roomID).emit('update-clients',{clients: [...io.sockets.adapter.rooms.get(roomID)!]});
   });
 
 });
